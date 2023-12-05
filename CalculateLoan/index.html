@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Loan Details</title>
+    <style> 
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            background-color: rgb(220, 196, 220);
+            opacity: 0.9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: rgb(4, 4, 4);
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: rgb(181, 130, 181);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-left: 35%;
+            background-color: rgb(32, 31, 31);
+            color: rgb(249, 247, 247);
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            color: rgb(181, 130, 181);
+        }
+
+        #idValidation {
+            color: red;
+            margin-top: -16px;
+            margin-bottom: 16px;
+        }
+
+        #result {
+            margin-top: 50px;
+            margin-left: 41%;
+            color: rgb(4, 4, 4);
+        }
+
+        #name {
+            justify-content: start;
+            align-content: start;
+            position: absolute;
+            left: 44px;
+        }
+
+        .elex {
+            color: #aa2817;
+        }
+
+        .media {
+            color: rgb(4, 4, 4);
+        }
+
+    </style>
+</head>
+<body>
+    <div id="name">
+        <h2><span class="elex">Elex</span><span class="media">Media</span></h2>
+    </div>
+    <h1 id="heading">Loan Details</h1>
+    <form id="loanForm">
+        <label for="employeeID">Employee ID:</label>
+        <input type="text" id="employeeID" required pattern="E.{3,}" title="Minimum four characters with 'E' at the beginning">
+        <p id="idValidation" style="color: red;"></p>
+
+        <label for="employeeName">Name:</label>
+        <input type="text" id="employeeName" required>
+
+        <label for="employeeAddress">Address:</label>
+        <input type="text" id="employeeAddress" required>
+
+        <label for="employeeDesignation">Designation:</label>
+        <select id="employeeDesignation" required>
+            <option value="manager">Manager</option>
+            <option value="developer">Developer</option>
+            <option value="analyst">Analyst</option>
+        </select>
+
+        <label for="loanAmount">Loan Amount:</label>
+        <input type="number" id="loanAmount" required>
+
+        <label for="loanDate">Date of Loan:</label>
+        <input type="date" id="loanDate" required>
+
+        <label for="interestRate">Interest Rate (%):</label>
+        <input type="number" id="interestRate" required>
+
+        <label for="maturityDate">Maturity Date:</label>
+        <input type="date" id="maturityDate" required>
+
+        <button type="button" onclick="validateAndCalculateLoan()">Calculate Loan</button>
+
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function validateAndCalculateLoan() {
+            const employeeIDInput = document.getElementById('employeeID');
+            const idValidationMessage = document.getElementById('idValidation');
+
+            // Check the pattern validity
+            if (!employeeIDInput.checkValidity()) {
+                idValidationMessage.textContent = 'Invalid employee ID. It must start with the letter "E" and have a minimum length of four characters.';
+                return;
+            }
+
+            // Clear any previous validation messages
+            idValidationMessage.textContent = '';
+
+            // Calculate loan
+            calculateLoan();
+        }
+        function calculateLoan() {
+            // Get input values
+            const designation = document.getElementById('employeeDesignation').value;
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+
+            // Perform calculations based on designation
+            let interestMultiplier = 0;
+            switch (designation) {
+                case 'manager':
+                    interestMultiplier = 0.1;
+                    break;
+                case 'developer':
+                    interestMultiplier = 0.08;
+                    break;
+                case 'analyst':
+                    interestMultiplier = 0.05;
+                    break;
+            }
+
+            const interest = loanAmount * interestMultiplier;
+            const totalAmount = loanAmount + interest;
+
+            // Display the result
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<p><b>Loan Amount:</b> $${loanAmount.toFixed(2)}</p>
+                                   <p><b>Interest:</b> $${interest.toFixed(2)}</p>
+                                   <p><b>Total Amount Payable:</b> $${totalAmount.toFixed(2)}</p>`;
+        }
+    </script>
+</body>
+</html>
